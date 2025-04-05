@@ -1,6 +1,6 @@
 "use Strict";//it is use for newer version code
 console.log(typeof null); // it is use to defirne type of value and null is a object type;
- //primitive data type
+ //primitive data type(Tack memory space)
 /*
 1.String
 2.Number
@@ -16,7 +16,7 @@ console.log(typeof null); // it is use to defirne type of value and null is a ob
 */
 //alert(55) => we can not use alert in node js
 
-//non primitive or reference data type 
+//non primitive or reference data type (Heap memory space)
 /*
 1.Array
 2.Object
