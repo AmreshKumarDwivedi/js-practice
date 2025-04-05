@@ -15,3 +15,11 @@ console.log(typeof null); // it is use to defirne type of value and null is a ob
 
 */
 //alert(55) => we can not use alert in node js
+
+//non primitive or reference data type 
+/*
+1.Array
+2.Object
+3.Function
+
+*/
