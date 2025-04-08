@@ -32,4 +32,42 @@ function userLoggedIn1(username = 'sam'){  //this is new method for check condit
   return `${username} is login now`
 
 }
-console.log(userLoggedIn1())
+console.log(userLoggedIn1());
+
+// we can pass more argument using rest operatore which is also called spred in concat arry or object
+
+function cartPrice(...price){
+    return price;
+}
+//console.log(cartPrice(20,30,50));
+
+function cartPrice1(val1,val2,...price){
+    return val1,price,val2;
+}
+console.log(cartPrice1(20,30,50,60,70,800));
+
+
+//Passing object in an function
+
+let user = {
+    name:'Amresh'
+}
+
+function passObject(myObj){
+    return `${myObj.name} is here`
+
+}
+
+console.log(passObject(user)); // you can directly paas object also
+
+//Passing array 
+let userdata = [100,200,300]
+
+function passArray(myArr){
+    return myArr[1]
+
+}
+
+console.log(passArray(userdata));
+
+
