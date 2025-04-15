@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="heading" class="domclass">DOM Element Selector<span style="display: none;">learn difference between 'textContent' and 'innerText'</span></h1>
+    <p>Lorem ipsum dolor sit amet.
+    </p>
+    <h2>Lorem ipsum dolor sit amet.1</h2>
+    <h2>Lorem ipsum dolor sit amet.2</h2>
+    <ul>
+    <li class="list-class">one</li>
+    <li class="list-class">two</li>
+    <li class="list-class">three</li></ul>
+    <input type="password" name="" id=""/>
+</body>
+<script>
+    var title2 = document.getElementById('heading');
+title2.style.backgroundColor = 'green';
+title2.style.color = 'white';
+title2.style.borderRadius = '5px';
+console.log(title2.textContent);// It shows all text either it visible or not
+console.log(title2.innerHTML); // It show text with whole html
+console.log(title2.innerText);//--> It shows only visible text
+document.querySelector('input[type="password"]'); //--> It is used for get value by using attribute 
+//DOM querySelector
+
+document.querySelector('h2') //--> It is always select first element 
+document.querySelector('ul li').textContent = 'one two' //--> It is only applicable on first li in ul
+
+
+
+// DOM querySelectorAll
+const litext = document.querySelectorAll('li');
+litext.forEach((l)=>{
+l.style.color = 'green'; //--> It reutrn nodeLit so we use forEach
+})
+
+//DOM select by className --> when we use this we did'nt get nodeList we get Htmlemement so we need to convert this in array after that we can use map or foreach
+const byusing_classname = document.getElementsByClassName('list-class');
+const getarray = Array.from(byusing_classname);
+getarray.map((l)=> l.style.color = 'blue');
+</script>
+</html>
