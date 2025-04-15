@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul class="language">
+        <li>javascript</li>
+    </ul>
+</body>
+<script>
+    function laguageName(langname){ //---> this is basic type it is not optimized
+    const getData = document.createElement('li');
+    getData.innerHTML = `${langname}`;
+    document.querySelector('.language').appendChild(getData)
+    }
+    laguageName('jquery')
+    
+
+    function optimizetext(lan){ //--> always prefer this
+        const getData = document.createElement('li');
+        getData.appendChild(document.createTextNode(lan));
+        document.querySelector('.language').appendChild(getData)
+
+
+    }
+    optimizetext('python')
+
+    //edit
+    const li = document.querySelector('li:nth-child(2)');
+    const newli = document.createElement('li');
+    newli.textContent = 'Mojo'
+    li.replaceWith(newli)
+
+    //remove
+    const remove_data = document.querySelector('li:last-child');
+    remove_data.remove();
+
+</script>
+</html>
