@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    const body = document.querySelector('body');
+    body.addEventListener('keydown',function(e){
+    body.innerHTML =    `<table>
+  <tr>
+    <th>Key</th>
+    <th>keyCode</th>
+    <th>KeyDigin</th>
+  </tr>
+  <tr>
+    <td>${e.key === " " ? "space" : e.key}</td>
+    <td>${e.keyCode}</td>
+    <td>${e.which}</td>
+  </tr>
+ 
+</table>`
+    })
+</script>
+</html>

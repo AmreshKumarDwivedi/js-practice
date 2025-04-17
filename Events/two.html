@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Chai aur code</h1>
+    <button class="mybtn">Click me</button>
+</body>
+<script>
+      const changeText = document.querySelector('h1');
+
+    const amresh = ()=>{
+        changeText.innerHTML = 'Hello Amresh'
+    }
+    const timeout = setTimeout(amresh,2000);
+
+    //we can stop setimeout using clear timeout
+
+    const btn = document.querySelector('.mybtn');
+    btn.addEventListener('click',()=>{
+        clearTimeout(timeout);
+    })
+</script>
+</html>

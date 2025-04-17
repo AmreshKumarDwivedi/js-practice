@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Random BG Color</title>
+</head>
+<body>
+   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
+   <button id="start">Start</button>
+   <button id="stop">Stop</button>
+
+   <script>
+      const start = document.querySelector('#start');
+      const stop = document.querySelector('#stop');
+      const hex = '123456789ABCDEF';
+      const body = document.querySelector('body');
+      let interval;
+
+      // Function to generate random hex color
+      const changeColor = () => {
+         let color = '#';
+         for (let i = 0; i < 6; i++) {
+            color += hex[Math.floor(Math.random() * hex.length)];
+         }
+         return color;
+      };
+
+      // Function to start changing the background color
+      const startChangingColor = () => {
+         if (!interval) {
+            interval = setInterval(() => {
+               body.style.backgroundColor = changeColor();
+            }, 1000);
+         }
+      };
+
+     
+      start.addEventListener('click', startChangingColor);
+
+      stop.addEventListener('click', () => {
+         clearInterval(interval);
+         interval = null;
+      });
+   </script>
+</body>
+</html>
