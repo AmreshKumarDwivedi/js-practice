@@ -6,17 +6,33 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="imageattr">
+      <img id="image" src="" style="height: 100%;width: 100%;"/>
+      <div id="getDataa">
+        <img id="image1" src="" style="height: 100%;width: 100%;"/>
+      </div>
+    </div>
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima sequi beatae incidunt maiores quae aliquid cupiditate corporis earum porro ducimus.</p>
 </body>
 <script>
+    //const body = document.querySelector('body div div img');
+   var body1 = document.querySelector('body #getDataa img');
     const requestUrl = 'https://api.github.com/users/hiteshchoudhary';
     let xhr = new XMLHttpRequest();
     xhr.open('GET',requestUrl);
     xhr.onreadystatechange = function() {
     if (xhr.readyState === 4 && xhr.status === 200) {
         const data = JSON.parse(this.response)
-        console.log(data.followers)
-    }
+        // console.log(data.followers)
+        // var body = document.querySelector('body');
+        // var div = document.createElement('div');
+        // div.id = 'newelement';
+        // div.innerHTML = `<h1>${data.name}</h1>
+        // <img src="${data.avatar_url}" style="height: 100%;width: 100%;"/>`;
+         const srcc = data.avatar_url;
+        // console.log(srcc);
+        body1.setAttribute('src',srcc);
+ }
 };
     xhr.send()
 </script>
