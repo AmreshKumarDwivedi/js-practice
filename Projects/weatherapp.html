@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #4facfe, #00f2fe); /* Default */
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.5s; /* Smooth background change */
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .input-section {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        #city-input {
+            padding: 12px;
+            width: 250px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            outline: none;
+        }
+        #search-btn {
+            padding: 12px 25px;
+            background: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #search-btn:hover {
+            background: #e55a50;
+        }
+        #weather-image img {
+            max-width: 100px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.8); /* Icon background for contrast */
+            border-radius: 10px;
+        }
+        #weather-output {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        #weather-output p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        #nextdaydata {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .forecast-card {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            width: 150px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        .forecast-card:hover {
+            transform: scale(1.05);
+        }
+        .forecast-card img {
+            max-width: 50px;
+        }
+        .forecast-card p {
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+        #error-message {
+            color: #ffcccb;
+            min-height: 20px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-width">
+        <div class="container">
+            <h1>Weather App</h1>
+            <div class="input-section">
+                <input type="text" id="city-input" placeholder="Enter city name" aria-label="City name">
+                <button id="search-btn">Get Weather</button>
+            </div>
+            <div id="weather-image">
+                <img src="" style="height:auto;width:auto"/>
+            </div>
+            <div id="weather-output">
+                <p id="city-name"></p>
+                <p id="temperature"></p>
+                <p id="description"></p>
+                <p id="humidity"></p>
+                <p id="wind-speed"></p>
+            </div>
+            <div id="nextdaydata"></div>
+            <div id="error-message"></div>
+        </div>
+    </div>
+    <script>
+        function $(id) {
+            return document.getElementById(id);
+        }
+
+        const temp = $('temperature');
+        const desc = $('description');
+        const hdty = $('humidity');
+        const windspeed = $('wind-speed');
+        const image_icon = document.querySelector('#weather-image img');
+        const append_html = $('nextdaydata');
+        const input_value = $('city-input');
+        const button = $('search-btn');
+        const api_key = '6169744843e908586dd88c149b1824fe';
+
+        // Function to set dynamic background based on weather
+        function setBackground(weatherMain, icon) {
+            let bgGradient = 'linear-gradient(135deg, #4facfe, #00f2fe)'; // Default
+            if (weatherMain === 'Clear') {
+                bgGradient = icon.includes('n') 
+                    ? 'linear-gradient(135deg, #1e3c72, #2a5298)' // Night
+                    : 'linear-gradient(135deg, #f7b733, #fc4a1a)'; // Day
+            } else if (weatherMain === 'Clouds') {
+                bgGradient = 'linear-gradient(135deg, #bdc3c7, #2c3e50)';
+            } else if (weatherMain === 'Rain' || weatherMain === 'Drizzle') {
+                bgGradient = 'linear-gradient(135deg, #2b5876, #4e4376)';
+            } else if (weatherMain === 'Thunderstorm') {
+                bgGradient = 'linear-gradient(135deg, #2c3e50, #4b134f)';
+            } else if (weatherMain === 'Snow') {
+                bgGradient = 'linear-gradient(135deg, #e0eafc, #cfdef3)';
+            } else if (['Mist', 'Fog', 'Haze', 'Smoke'].includes(weatherMain)) {
+                bgGradient = 'linear-gradient(135deg, #d3cce3, #e9e4f0)';
+            }
+            document.body.style.background = bgGradient;
+        }
+
+        // Function to display forecast
+        function displayForecast(forecastList) {
+            append_html.innerHTML = "";
+            const seenDays = new Set();
+            forecastList.forEach(item => {
+                const date = new Date(item.dt * 1000);
+                const day = date.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' });
+                if (!seenDays.has(day) && seenDays.size < 5) {
+                    seenDays.add(day);
+                    const temp = item.main.temp;
+                    const icon = item.weather[0].icon;
+                    const imgSrc = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+                    append_html.innerHTML += `
+                        <div class="forecast-card">
+                            <p>${day}</p>
+                            <img src="${imgSrc}" style="height:auto;width:auto"/>
+                            <p>Temperature: ${temp}°C</p>
+                        </div>`;
+                }
+            });
+            if (seenDays.size === 0) {
+                append_html.innerHTML = "<p>No forecast data available</p>";
+            }
+        }
+
+        // Current weather and forecast by geolocation
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                // Current Weather
+                fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${api_key}&units=metric`)
+                    .then(response => {
+                        if (!response.ok) throw new Error("Current weather fetch failed");
+                        return response.json();
+                    })
+                    .then(data => {
+                        $("city-name").textContent = data.name;
+                        const icon_text = data.weather[0].icon;
+                        const img_icon = `http://openweathermap.org/img/wn/${icon_text}@2x.png`;
+                        image_icon.setAttribute('src', img_icon);
+                        temp.textContent = `${data.main.temp}°C`;
+                        desc.textContent = `Weather: ${data.weather[0].description}`;
+                        hdty.textContent = `Humidity: ${data.main.humidity}%`;
+                        windspeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
+                        $("error-message").textContent = "";
+                        setBackground(data.weather[0].main, icon_text); // Set background
+                    })
+                    .catch(error => {
+                        $("error-message").textContent = "Error fetching current weather!";
+                        console.error('Error:', error);
+                    });
+
+                // 5-Day Forecast
+                fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${api_key}&units=metric`)
+                    .then(response => {
+                        if (!response.ok) throw new Error("Forecast fetch failed");
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Forecast data:", data);
+                        displayForecast(data.list);
+                    })
+                    .catch(error => {
+                        $("error-message").textContent = "Error fetching forecast!";
+                        console.error('Error:', error);
+                    });
+            },
+            error => {
+                $("error-message").textContent = "Location access denied! Enter a city name.";
+                console.error('Geolocation error:', error);
+            }
+        );
+
+        // Fetch weather by city input
+        function getData(city) {
+            const api_url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}&units=metric`;
+            fetch(api_url)
+                .then(response => {
+                    if (!response.ok) throw new Error("City not found");
+                    return response.json();
+                })
+                .then(data => {
+                    $("city-name").textContent = data.name;
+                    const icon_text = data.weather[0].icon;
+                    const img_icon = `http://openweathermap.org/img/wn/${icon_text}@2x.png`;
+                    image_icon.setAttribute('src', img_icon);
+                    temp.textContent = `${data.main.temp}°C`;
+                    desc.textContent = `Weather: ${data.weather[0].description}`;
+                    hdty.textContent = `Humidity: ${data.main.humidity}%`;
+                    windspeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
+                    $("error-message").textContent = "";
+                    setBackground(data.weather[0].main, icon_text); // Set background
+
+                    // Fetch forecast for the city
+                    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${api_key}&units=metric`)
+                        .then(response => {
+                            if (!response.ok) throw new Error("Forecast fetch failed");
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log("City forecast data:", data);
+                            displayForecast(data.list);
+                        })
+                        .catch(error => {
+                            $("error-message").textContent = "Error fetching forecast!";
+                            console.error('Error:', error);
+                        });
+                })
+                .catch(error => {
+                    $("error-message").textContent = "City not found!";
+                    console.error('Error:', error);
+                });
+        }
+
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            let getCityName = input_value.value.trim();
+            if (getCityName === "") {
+                $("error-message").textContent = "Please enter a city name!";
+                return;
+            }
+            $("error-message").textContent = "";
+            getData(getCityName);
+        });
+    </script>
+</body>
+</html>
